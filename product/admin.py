@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Product, Review
+from .models import Category, Product, Review
 from django.utils import timezone
 
 
@@ -11,8 +11,8 @@ class ReviewInline(admin.TabularInline):  # StackedInline farklı bir görünüm
     model = Review
     extra = 1
     classes = ('collapse',)                 ### göster - gizlet
-    # min_num = 3
-    # max_num = 20
+    # min_num = 3                           ### min-max review alani
+    # max_num = 20  
 ##5
 
 ##1
@@ -35,12 +35,16 @@ class ProductAdmin(admin.ModelAdmin):
             ),
         }),
         ('Optionals Settings', {
-            # "classes" : ("collapse", ),
-            "fields" : ("description",),
+            "classes" : ("collapse", ),
+            "fields" : ("description", "categories"),
             'description' : "You can use this section for optionals settings"
         })
     )
     ##1
+    
+    # filter_horizontal = ("categories", )      ### another example
+    filter_vertical = ("categories", )          ### example
+    
 
     ##2 
     actions = ("is_in_stock", "is_not_in_stock",)           ### actions'a "is_not_in_stock" sonradan elave etdim
@@ -75,6 +79,8 @@ class ReviewAdmin(admin.ModelAdmin):
 ##1
 admin.site.register(Product, ProductAdmin,)
 admin.site.register(Review,ReviewAdmin)
+admin.site.register(Category)
+
 
 
 admin.site.site_title = "Clarusway Title"

@@ -3,7 +3,19 @@ from ckeditor.fields import RichTextField
 
 # Create your models here.
 
-####### Product Model ################
+############# Category Model ########### Modeller her zaman yuxarida olur ###########
+
+class Category(models.Model):
+    name = models.CharField(max_length=100, verbose_name="category name")
+    is_active = models.BooleanField(default=True)
+    class Meta:
+        verbose_name = "Category"
+        verbose_name_plural = "Categories"
+        
+    def __str__(self):
+        return self.name
+
+####### Product Model ######## Modeller her zaman yuxarida olur ########
 
 class Product(models.Model):
     name = models.CharField(max_length=100)
@@ -13,6 +25,8 @@ class Product(models.Model):
     update_date = models.DateTimeField(auto_now=True)
     is_in_stock = models.BooleanField(default=True)
     slug = models.SlugField(null=True, blank=True)
+    categories = models.ManyToManyField(Category, related_name="products")
+    
 
     class Meta:
         verbose_name = "Product"
@@ -39,4 +53,6 @@ class Review(models.Model):
 
     def __str__(self):
         return f"{self.product.name} - {self.review}" 
+    
+    
     
