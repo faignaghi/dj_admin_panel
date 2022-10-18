@@ -4,6 +4,7 @@ from django.utils.safestring import mark_safe
 # Register your models here.
 from .models import Category, Product, Review
 from django.utils import timezone
+from django_admin_listfilter_dropdown.filters import RelatedDropdownFilter, DropdownFilter
 
 
 ##5
@@ -20,15 +21,16 @@ class ReviewInline(admin.TabularInline):  # StackedInline farklı bir görünüm
 class ProductAdmin(admin.ModelAdmin):
     # readonly_fields = ("create_date",)
     list_display = ("name", "create_date", "is_in_stock", "update_date", "added_days_ago", "how_many_reviews", "bring_img_to_list")
-    list_editable = ( "is_in_stock",)                           ### list_editable "editleme effekti verir"
-    list_display_links = ("name", )       ### list_display_links "link effekti verir"
-    search_fields = ("name",)                                   ### search_fields "search etmek mumkun olur"
-    prepopulated_fields = {'slug' : ('name',)}                  ### when adding product in admin site "slug yaradir"
+    list_editable = ( "is_in_stock",)                                               ### list_editable "editleme effekti verir"
+    list_filter = ("is_in_stock", "create_date", ("name", DropdownFilter))
+    list_display_links = ("name", )                                                 ### list_display_links "link effekti verir"
+    search_fields = ("name",)                                                       ### search_fields "search etmek mumkun olur"
+    prepopulated_fields = {'slug' : ('name',)}                                      ### when adding product in admin site "slug yaradir"
     list_per_page = 15
     date_hierarchy = "update_date"
     inlines = (ReviewInline,)
     readonly_fields = ("bring_image",)
-    # fields = (('name', 'slug'), 'description', "is_in_stock")   ### fieldset kullandığımız zaman bunu kullanamayız "hansi fieldler yan-yana olsun"
+    # fields = (('name', 'slug'), 'description', "is_in_stock")                     ### fieldset kullandığımız zaman bunu kullanamayız "hansi fieldler yan-yana olsun"
     
     fieldsets = (
         ("General Fields", {
@@ -85,6 +87,7 @@ class ReviewAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'created_date', 'is_released')
     list_per_page = 50
     raw_id_fields = ('product',) 
+    list_filter = (('product', RelatedDropdownFilter),)
 ##4
 
 
