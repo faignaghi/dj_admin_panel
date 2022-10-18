@@ -593,7 +593,7 @@ INSTALLED_APPS = (
     'import_export',
 )
 
-create resources.py
+create resources.py under appname folder
 ```python
 from import_export import resources
 from products.models import Review
